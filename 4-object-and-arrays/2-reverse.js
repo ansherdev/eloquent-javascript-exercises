@@ -10,11 +10,14 @@ export const reverse = (arr) => {
 
 export const reverseInPlace = (arr) => {
   const reversed = arr;
+  const loopExitCondition = Math.floor(arr.length / 2);
 
-  const temp = reverse(arr);
+  for (let i = 0; i < loopExitCondition; i++) {
+    const temp = reversed[i];
+    const j = arr.length - 1 - i;
 
-  for (let i = 0; i < arr.length; i++) {
-    reversed[i] = temp[i];
+    reversed[i] = reversed[j];
+    reversed[j] = temp;
   }
 
   return reversed;
