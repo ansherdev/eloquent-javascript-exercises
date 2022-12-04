@@ -1,7 +1,7 @@
 import { describe, expect, test } from "@jest/globals";
 import { reverse, reverseInPlace } from "./2-reverse";
 
-describe("4-object-and-arrays/reverse.js (reverse)", () => {
+describe("4-object-and-arrays/2-reverse.js (reverse)", () => {
   const testArray = [1, 2, 3];
 
   test("[1, 2, 3] => equal [3, 2, 1]", () => {
@@ -13,7 +13,7 @@ describe("4-object-and-arrays/reverse.js (reverse)", () => {
   });
 });
 
-describe("4-object-and-arrays/reverse.js (reverseInPlace)", () => {
+describe("4-object-and-arrays/2-reverse.js (reverseInPlace)", () => {
   const testArray = [1, 2, 3];
 
   test("[1, 2, 3] => equal [3, 2, 1]", () => {
