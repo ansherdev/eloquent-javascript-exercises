@@ -1,30 +1,40 @@
 class PGroup {
+  constructor(iterable = []) {
+    for (const element of iterable) {
+      if (this.has(element)) {
+        continue;
+      }
+
+      this[this.length] = element;
+    }
+  }
+
   get length() {
     return Object.keys(this).length;
   }
 
   add(value) {
-    const group = PGroup.from(this);
-
-    if (!group.has(value)) {
-      group[group.length] = value;
+    if (this.has(value)) {
+      return this;
     }
 
-    return group;
+    const copy = new PGroup(this);
+    copy[copy.length] = value;
+
+    return copy;
   }
 
   delete(value) {
-    const group = PGroup.from(this);
+    const index = Object.values(this).findIndex((current) => current === value);
 
-    const index = Object.values(group).findIndex(
-      (current) => current === value
-    );
-
-    if (index !== -1) {
-      delete group[index];
+    if (index === -1) {
+      return this;
     }
 
-    return group;
+    const copy = new PGroup(this);
+    delete copy[index];
+
+    return new PGroup(copy);
   }
 
   has(value) {
@@ -33,22 +43,6 @@ class PGroup {
 
   [Symbol.iterator]() {
     return new PGroupIterator(this);
-  }
-
-  static from(iterable) {
-    const group = new PGroup();
-
-    if (iterable.length === 0) {
-      return group;
-    }
-
-    for (const element of iterable) {
-      if (!group.has(element)) {
-        group[group.length] = element;
-      }
-    }
-
-    return group;
   }
 }
 
@@ -59,21 +53,30 @@ class PGroupIterator {
   }
 
   next() {
-    if (this.index === this.group.length) {
+    const keys = Object.keys(this.group);
+
+    if (this.index === Number(keys[keys.length - 1]) + 1) {
       return { done: true };
     }
 
-    const value = this.group[this.index];
+    let value;
 
-    this.index++;
+    do {
+      if (this.index >= Number(keys[keys.length])) {
+        return { done: true };
+      }
+
+      value = this.group[this.index];
+      this.index++;
+    } while (value === undefined);
 
     return { value, done: false };
   }
 }
 
-const firstGroup = PGroup.from([1, 2, 3]);
+const firstGroup = new PGroup([1, 2, 3, 4, 5]);
 const secondGroup = firstGroup.add(4);
-const thirdGroup = secondGroup.delete(2);
+const thirdGroup = secondGroup.delete(3);
 
 console.log("firstGroup", firstGroup);
 console.log("secondGroup", secondGroup);
